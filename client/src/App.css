@@ -1,0 +1,15 @@
+#registerCard{
+  width: 500px;
+}
+#registerTextFields{
+  width: 300px;
+}
+#registerCardContent{
+  padding : 20%
+}
+#registerMain{
+  padding-left: 33%;
+}
+#registerButton{
+  padding-left: 35%;
+}
