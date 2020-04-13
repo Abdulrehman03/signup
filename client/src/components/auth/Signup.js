@@ -1,7 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import $ from 'jquery';
+import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
-import { register, loadUsers } from '../../actions/auth'
+import { registerHandler, loadUsers } from '../../actions/auth'
 import { ToastsContainer, ToastsStore, ToastsContainerPosition } from 'react-toasts';
 // import  'materialize-css'
 let usersName = [];
@@ -10,7 +11,7 @@ let counter = true
 
 
 
-const Signup = ({ register, loadUsers, users }) => {
+const Signup = ({ registerHandler, loadUsers, users }) => {
 
 
     var chip = {
@@ -63,8 +64,8 @@ const Signup = ({ register, loadUsers, users }) => {
                 minLength: 1
             }
         });
-     
-        console.log( window.$('.register .chips').chips())
+
+        console.log(window.$('.register .chips').chips())
 
 
         // We should get Chips array in this 
@@ -87,77 +88,68 @@ const Signup = ({ register, loadUsers, users }) => {
     //     setChipsData({ ...chipsData, chips: e.taget.value })
     // }
 
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        university: '',
-        rollnumber: '',
-        cnic: '',
-        users: []
-    })
-    const { name, email, university, rollnumber, cnic, password } = formData;
-
-
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
-
-    const onSubmit = e => {
-        // console.log(chipsData)
-        e.preventDefault();
-        register(formData)
-
-
-
-
+    const { register, handleSubmit, errors } = useForm();
+    const onSubmit = data => {
+        registerHandler(data)
+        console.log(data)
     }
+
 
     return (
         <div className="register">
 
             <div class="row" >
                 <div class="col s12 m7" id="registerMain">
-                    <form onSubmit={e => onSubmit(e)}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <div id="registerCard" class="card">
                             <div class="card-image">
                                 <img src="card.jpg" />
                                 <span class="card-title">Sign Up</span>
                             </div>
+
                             <div class="card-content" id="registerCardContent">
                                 <div class="row" id="registerTextFields">
                                     <div class="input-field col s12">
-                                        <input id="name" type="text" class="validate" value={name} name="name" onChange={e => onChange(e)} />
+                                        <input id="name" type="text" class="validate" name="name" ref={register({ required: true, minLength: 3 })} />
                                         <label for="name">Name</label>
+                                        {errors.name && errors.name.type === 'required' && <span id="errors" class="helper-text" > This is Required</span>}
+                                        {errors.name && errors.name.type === 'minLength' && <span id="errors" class="helper-text" > Name must contain Three letters</span>}
                                     </div>
                                 </div>
                                 <div class="row" id="registerTextFields">
                                     <div class="input-field col s12">
-                                        <input id="email" type="email" class="validate" value={email} name="email" onChange={e => onChange(e)} />
+                                        <input id="email" type="email" class="validate" name="email" ref={register({ required: true })} />
                                         <label for="email">Email</label>
+                                       {errors.email && errors.email.type === 'required' && <span id="errors" class="helper-text" > This is Required</span>}
                                     </div>
                                 </div>
                                 <div class="row" id="registerTextFields">
                                     <div class="input-field col s12">
-                                        <input id="password" type="password" class="validate" value={password} name="password" onChange={e => onChange(e)} />
+                                        <input id="password" type="password" class="validate" name="password" ref={register({ required: true })} />
                                         <label for="password">Password</label>
+                                       {errors.password && errors.password.type === 'required' && <span id="errors" class="helper-text" > This is Required</span>}
                                     </div>
                                 </div>
                                 <div class="row" id="registerTextFields">
                                     <div class="input-field col s12">
-                                        <input id="university" type="text" class="validate" value={university} name="university" onChange={e => onChange(e)} />
+                                        <input id="university" type="text" class="validate" name="university" ref={register({ required: true })} />
                                         <label for="university">University</label>
+                                        {errors.university && errors.university.type === 'required' && <span id="errors" class="helper-text" > This is Required</span>}
                                     </div>
                                 </div>
 
                                 <div class="row" id="registerTextFields">
                                     <div class="input-field col s12">
-                                        <input id="rollnumber" type="number" class="validate" value={rollnumber} name="rollnumber" onChange={e => onChange(e)} />
+                                        <input id="rollnumber" type="number" class="validate" name="rollnumber" ref={register({ required: true })} />
                                         <label for="rollnumber">Roll Number</label>
+                                        {errors.rollnumber && errors.rollnumber.type === 'required' && <span id="errors" class="helper-text" > This is Required</span>}
                                     </div>
                                 </div>
                                 <div class="row" id="registerTextFields">
                                     <div class="input-field col s12">
-                                        <input id="cnic" type="number" class="validate" value={cnic} name="cnic" onChange={e => onChange(e)} />
+                                        <input id="cnic" type="number" class="validate" name="cnic" ref={register({ required: true })} />
                                         <label for="cnic">CNIC</label>
+                                        {errors.cnic && errors.cnic.type === 'required' && <span id="errors" class="helper-text" > This is Required</span>}
                                     </div>
                                 </div>
                                 <label>
@@ -168,8 +160,9 @@ const Signup = ({ register, loadUsers, users }) => {
                                     <div>
                                         <div class="row" id="registerTextFields">
                                             <div class="input-field col s12">
-                                                <input id="university" type="text" class="validate" value={university} name="university" onChange={e => onChange(e)} />
+                                                <input id="university" type="text" class="validate" name="groupName" ref={register({ required: true })} />
                                                 <label for="university">Group Name</label>
+                                    {errors.groupName && errors.groupName.type === 'required' && <span id="errors" class="helper-text" > This is Required</span>}
                                             </div>
                                         </div>
 
@@ -197,4 +190,4 @@ const Signup = ({ register, loadUsers, users }) => {
 const mapStateToProps = state => ({
     users: state.auth.allUsers.users
 })
-export default connect(mapStateToProps, { register, loadUsers })(Signup)
+export default connect(mapStateToProps, { registerHandler, loadUsers })(Signup)

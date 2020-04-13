@@ -13,3 +13,6 @@
 #registerButton{
   padding-left: 35%;
 }
+#errors{
+  color: red;
+}

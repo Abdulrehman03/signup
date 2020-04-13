@@ -5,7 +5,7 @@ import {ToastsContainer, ToastsStore} from 'react-toasts';
 
 //Register User
 
-export const register = ({ name, email, university, rollnumber, cnic,password }) => async dispatch => {
+export const registerHandler = ({ name, email, university, rollnumber, cnic,password }) => async dispatch => {
     const config = {
         headers: {
             "Content-Type": 'application/json'
